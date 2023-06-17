@@ -4,14 +4,13 @@ services:
   mysql:
     image: mysql:8.0
     container_name: flight-mysql
-    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: "password"
-      MYSQL_DATABASE: "flight-ticket-system"
+      MYSQL_DATABASE: "flight-ticket"
       MYSQL_USER: "user"
       MYSQL_PASSWORD: "password"
     volumes:
-      - ./mysql/mysql_schema:/docker-entrypoint-initdb.d
+      - ./mysql_init:/docker-entrypoint-initdb.d
     networks:
       - demo-network
     ports:
