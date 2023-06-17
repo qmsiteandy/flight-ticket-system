@@ -16,5 +16,15 @@ services:
     ports:
       - 3306:3306
 
+  api-server:
+    build: .
+    container_name: flight-api-server
+    depends_on:
+      - "mysql"
+    ports:
+      - "8080:8080"
+    networks:
+      - demo-network
+
 networks:
   demo-network:
