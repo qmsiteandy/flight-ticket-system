@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: flight-mysql
+    env_file: ./.env
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+      - MYSQL_USER=$MYSQL_USER
+      - MYSQL_PASSWORD=$MYSQL_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+    volumes:
+      - ./mysql/init:/docker-entrypoint-initdb.d
+    ports:
+      - $MYSQL_PORT:$MYSQL_PORT
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 30
+
+  api-server:
+    build: ./api-server
+    container_name: flight-api-server
+    restart: always
+    env_file: ./.env
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      - API_SERVER_PORT=$API_SERVER_PORT
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=$MYSQL_USER
+      - MYSQL_PASSWORD=$MYSQL_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+    ports:
+      - $API_SERVER_PORT:$API_SERVER_PORT
