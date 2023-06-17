@@ -4,25 +4,27 @@ services:
   mysql:
     image: mysql:8.0
     container_name: flight-mysql
+    env_file: ./.env
     environment:
-      MYSQL_ROOT_PASSWORD: "password"
-      MYSQL_DATABASE: "flight-ticket"
-      MYSQL_USER: "user"
-      MYSQL_PASSWORD: "password"
+      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+      - MYSQL_USER=$MYSQL_USER
+      - MYSQL_PASSWORD=$MYSQL_PASSWORD
     volumes:
-      - ./mysql_init:/docker-entrypoint-initdb.d
+      - ./mysql/init:/docker-entrypoint-initdb.d
     networks:
       - demo-network
     ports:
-      - 3306:3306
+      - $MYSQL_LOCAL_PORT:$MYSQL_LOCAL_PORT
 
   api-server:
     build: .
     container_name: flight-api-server
+    env_file: ./.env
     depends_on:
       - "mysql"
     ports:
-      - "8080:8080"
+      - $API_SERVER_PORT:$API_SERVER_PORT
     networks:
       - demo-network
 
