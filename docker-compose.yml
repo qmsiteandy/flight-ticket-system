@@ -23,6 +23,8 @@ services:
     env_file: ./.env
     depends_on:
       - "mysql"
+    environment:
+      - API_SERVER_PORT=$API_SERVER_PORT
     ports:
       - $API_SERVER_PORT:$API_SERVER_PORT
     networks:
