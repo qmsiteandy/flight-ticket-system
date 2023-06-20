@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const mysql = require("../config/mysqlClient");
+const redis = require("../config/redisClient");
 
 // Recreate Demo data of Table flight and ticket
 router.post("/demoSeed", async (req, res, next) => {
@@ -39,6 +40,23 @@ router.post("/demoSeed", async (req, res, next) => {
   res.status(200).send("Recreate Demo Data Success");
 });
 
+// Cache Ticket to Redis
+router.post("/cacheTicket/:flight_id", async (req, res, next) => {
+  // Mysql get all tickets of the flight
+  mysqlQuery(
+    `SELECT ID, Owner_ID, Seat, Price FROM ticket WHERE Flight_ID=${req.params.flight_id}`
+  )
+    .catch((e) => next(e))
+    .then(async (data) => {
+      // Cache data into Redis
+      let hashData = data.map((item) => [item.ID, item.Seat]);
+      let redisKey = `flightTicket#${req.params.flight_id}`;
+      await redis.hSet(redisKey, hashData);
+
+      res.status(200).send(data);
+    });
+});
+
 // Each row means Flight_ID, Seat, Price
 const ticket_demo_values = [];
 for (let i = 1; i <= 10; i++) {
@@ -49,5 +67,14 @@ for (let i = 1; i <= 10; i++) {
   ticket_demo_values.push([0, `${i}E`, 1000]);
   ticket_demo_values.push([0, `${i}F`, 1000]);
 }
+
+const mysqlQuery = (sql) => {
+  return new Promise((resolve, reject) => {
+    mysql.query(sql, (err, result) => {
+      if (err) reject(err);
+      resolve(result);
+    });
+  });
+};
 
 module.exports = router;
