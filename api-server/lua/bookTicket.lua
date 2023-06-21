@@ -9,7 +9,7 @@ end
 -- Check qty <= Set's length
 local availableCount = redis.call("ZCARD", item_key);
 if not availableCount or availableCount < qty then
-    return nil
+  return nil
 end
 
 -- Pop the first n tickets

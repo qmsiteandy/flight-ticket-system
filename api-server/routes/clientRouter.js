@@ -4,6 +4,28 @@ const fs = require("fs");
 const mysql = require("../config/mysqlClient");
 const redis = require("../config/redisClient");
 
+// 取得班機資料
+router.get("/flight", (req, res, next) => {
+  mysql.query("SELECT * FROM flight", (err, result) => {
+    if (err) next(err);
+    return res.status(200).send(result);
+  });
+});
+
+// 顯示我的訂單
+router.get("/order/:user_id", (req, res, next) => {
+  const { user_id } = req.params;
+  mysql.query(
+    "SELECT * FROM ticket_order WHERE Owner_ID=?",
+    [user_id],
+    (err, result) => {
+      if (err) next(err);
+      return res.status(200).send(result);
+    }
+  );
+});
+
+// 訂購機票
 router.post("/bookTicket/:flight_id", async (req, res, next) => {
   const user_id = parseInt(req.body.user_id);
   const flight_id = parseInt(req.params.flight_id);
