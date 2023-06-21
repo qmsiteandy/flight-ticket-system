@@ -48,10 +48,13 @@ router.post("/cacheTicket/:flight_id", async (req, res, next) => {
   )
     .catch((e) => next(e))
     .then(async (data) => {
+      // Convert data for saving
+      let dataForRedis = data.map((item) => {
+        return { score: item.ID, value: item.Seat };
+      });
       // Cache data into Redis
-      let hashData = data.map((item) => [item.ID, item.Seat]);
       let redisKey = `flightTicket#${req.params.flight_id}`;
-      await redis.hSet(redisKey, hashData);
+      await redis.zAdd(redisKey, dataForRedis);
 
       res.status(200).send(data);
     });
