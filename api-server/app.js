@@ -19,6 +19,7 @@ app.get("/", (req, res, next) => {
 
 // Routes Middleware
 app.use("/api/admin", routes.adminRouter);
+app.use("/api/client", routes.clientRouter);
 
 // API for testing mysql connection
 app.get("/api/mysqlTest", (req, res, next) => {

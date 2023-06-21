@@ -16,10 +16,12 @@ CREATE TABLE `ticket` (
     FOREIGN KEY (Flight_ID) REFERENCES flight(ID)
 );
 
-CREATE TABLE `order` (
+CREATE TABLE `ticket_order` (
     `ID` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `Owner_ID` int, 
     `Ticket_ID` int,
 
     FOREIGN KEY(Ticket_ID) REFERENCES ticket(ID)
 );
+
+SET SQL_SAFE_UPDATES = 0;

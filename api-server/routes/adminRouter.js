@@ -8,6 +8,14 @@ router.post("/demoSeed", async (req, res, next) => {
   // NOTICE:
   // Must delete ticket data before flight data, beecuse of the Foieign Key Constrains
 
+  // Delete old demo data rows of ticket_order
+  await mysql.query(
+    "DELETE FROM ticket_order WHERE Ticket_ID IN (SELECT ID FROM ticket WHERE Flight_ID=0)",
+    (err, result) => {
+      if (err) next(err);
+    }
+  );
+
   // Delete old demo data rows of ticket
   await mysql.query("DELETE FROM ticket WHERE Flight_ID = 0", (err, result) => {
     if (err) next(err);
@@ -42,21 +50,34 @@ router.post("/demoSeed", async (req, res, next) => {
 
 // Cache Ticket to Redis
 router.post("/cacheTicket/:flight_id", async (req, res, next) => {
+  const { flight_id } = req.params;
+
   // Mysql get all tickets of the flight
   mysqlQuery(
-    `SELECT ID, Owner_ID, Seat, Price FROM ticket WHERE Flight_ID=${req.params.flight_id}`
+    `SELECT ID, Owner_ID, Seat, Price FROM ticket WHERE Flight_ID=${req.params.flight_id} and Owner_ID is null`
   )
     .catch((e) => next(e))
     .then(async (data) => {
+      if (data.length === 0)
+        return res
+          .status(404)
+          .send(
+            `Ticket Table has no data for flight_id: ${flight_id}, please check the id is correct.`
+          );
+
       // Convert data for saving
       let dataForRedis = data.map((item) => {
         return { score: item.ID, value: item.Seat };
       });
       // Cache data into Redis
-      let redisKey = `flightTicket#${req.params.flight_id}`;
+      let redisKey = `flightTicket#${flight_id}`;
       await redis.zAdd(redisKey, dataForRedis);
 
-      res.status(200).send(data);
+      res
+        .status(200)
+        .send(
+          `Successfully cache ${data.length} data for flight id ${flight_id}.`
+        );
     });
 });
 
