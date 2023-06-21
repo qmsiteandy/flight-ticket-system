@@ -1,6 +1,16 @@
 version: "3.8"
 
 services:
+  redis:
+    image: redis:alpine3.18
+    env_file: ./.env
+    container_name: flight-redis
+    restart: always
+    ports:
+      - $REDIS_PORT:$REDIS_PORT
+    environment:
+      - REDIS_HOST=$REDIS_HOST
+
   mysql:
     image: mysql:8.0
     container_name: flight-mysql
@@ -34,5 +44,6 @@ services:
       - MYSQL_USER=$MYSQL_USER
       - MYSQL_PASSWORD=$MYSQL_PASSWORD
       - MYSQL_DATABASE=$MYSQL_DATABASE
+      - REDIS_HOST=redis
     ports:
       - $API_SERVER_PORT:$API_SERVER_PORT
