@@ -6,10 +6,13 @@ const redis = require("../config/redisClient");
 
 // 取得班機資料
 router.get("/flight", (req, res, next) => {
-  mysql.query("SELECT * FROM flight", (err, result) => {
-    if (err) next(err);
-    return res.status(200).send(result);
-  });
+  mysql.query(
+    "SELECT f.*, COUNT(t.Seat) as vacancy FROM flight f LEFT JOIN ticket t ON f.ID=t.Flight_ID WHERE t.Owner_ID is null GROUP BY f.ID ",
+    (err, result) => {
+      if (err) next(err);
+      return res.status(200).send(result);
+    }
+  );
 });
 
 // 顯示我的訂單
