@@ -41,9 +41,11 @@ services:
     environment:
       - API_SERVER_PORT=$API_SERVER_PORT
       - MYSQL_HOST=mysql
+      - MYSQL_PORT=$MYSQL_PORT
       - MYSQL_USER=$MYSQL_USER
       - MYSQL_PASSWORD=$MYSQL_PASSWORD
       - MYSQL_DATABASE=$MYSQL_DATABASE
       - REDIS_HOST=redis
+      - REDIS_PORT=$REDIS_PORT
     ports:
       - $API_SERVER_PORT:$API_SERVER_PORT
