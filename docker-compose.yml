@@ -8,8 +8,6 @@ services:
     restart: always
     ports:
       - $REDIS_PORT:$REDIS_PORT
-    environment:
-      - REDIS_HOST=$REDIS_HOST
 
   mysql:
     image: mysql:8.0
