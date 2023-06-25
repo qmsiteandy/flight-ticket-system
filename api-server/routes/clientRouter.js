@@ -47,7 +47,7 @@ router.post("/bookTicket/:flight_id", async (req, res, next) => {
   let bookedData;
   try {
     bookedData = await redis.eval(bookTicketScript, {
-      keys: [`flightTicket#${flight_id}`],
+      keys: [`flightTicket#${flight_id}`, `ticketSellCount#${flight_id}`],
       arguments: [qty.toString()],
     });
   } catch (e) {
