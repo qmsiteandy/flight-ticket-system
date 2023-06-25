@@ -70,8 +70,9 @@ router.post("/cacheTicket/:flight_id", async (req, res, next) => {
         return { score: item.ID, value: item.Seat };
       });
       // Cache data into Redis
-      let redisKey = `flightTicket#${flight_id}`;
-      await redis.zAdd(redisKey, dataForRedis);
+      await redis.zAdd(`flightTicket#${flight_id}`, dataForRedis);
+      // add data to record sell count
+      await redis.set(`ticketSellCount#${flight_id}`, 0);
 
       res
         .status(200)
