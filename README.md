@@ -14,8 +14,7 @@
 > - JMeter 進行負載測試
 
 ### 【系統架構安排】
-
-![系統架構圖](https://i.imgur.com/kVW4atL.png)
+<img src="https://i.imgur.com/kVW4atL.png" width="600"/>
 
 1. Client 請求經 Google DNS 轉換，將 Domain 轉換為系統的 IP。
 2. 系統運行於 GCP 的 Compute Engine 中，目前對外 IP 為 34.80.90.193 ，並且 Firewall 允許 http port 80 連線。
@@ -26,7 +25,7 @@
 4. Express 與 MySQL & Redis 連線並操作。
 
 ### 【資料庫安排】
-
+<img src="https://i.imgur.com/Rc5h9NT.png" width="600"/>
 ![MySQL 資料庫安排](https://i.imgur.com/Rc5h9NT.png)
 
 資料庫選擇使用 RDBMS，我選擇先使用熟悉的工具 MySQL，並建立三個資料表 (關聯如上圖)：
@@ -36,6 +35,7 @@
 - ticket_order：紀錄已成功搶到的機票訂單，並記錄關聯持有者及機票。
 - 目前尚未創建 User Table ，ticket、order 中的 Owner_ID 會先設定記錄 Demo 測試時輸入的使用者 ID。
 
+<img src="https://i.imgur.com/bjPj5kt.png" width="600"/>
 ![Redis 資料庫安排](https://i.imgur.com/bjPj5kt.png)
 
 使用 Redis 快取機票資訊，搭配 Lua 腳本執行，可以有效處理高併發及避免超賣狀況。
@@ -44,8 +44,7 @@
 - ticketSellCount# {flight_id}：記錄一個航班的機票出售數量，主要用於確認有無超賣。
 
 ### 【運作流程】
-
-![運作流程圖](https://i.imgur.com/eoKVGCb.png)
+<img src="https://i.imgur.com/eoKVGCb.png" width="600"/>
 
 **Admin 操作**
 
@@ -114,9 +113,9 @@ https://youtu.be/kU-pjC2lXrg
 ...
 mysql:
 ...
+# 將 init 目錄與 docker-entrypoint-initdb.d 目錄 Volume 連結
     volumes:
-	    # 將 init 目錄與 docker-entrypoint-initdb.d 目錄 Volume 連結
-        - ./mysql/init:/docker-entrypoint-initdb.d**
+        - ./mysql/init:/docker-entrypoint-initdb.d
 ...
 ```
 
@@ -140,8 +139,7 @@ api-server:
     ...
     depends_on:
         mysql:
-        condition: service_healthy
-	...
+        condition: service_healthy	
 ```
 
 ## api-server 本地端開發與 Docker-Compose 啟動使用不同 port
