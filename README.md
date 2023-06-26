@@ -2,7 +2,7 @@
 
 ### 【專案說明】
 
-> 以此專案練習最近學到的技術，製作一個航空公司訂票系統後端，並設計情境**「搶購限量優惠機票名額，處裡大量併發請求」**的功能，並部屬至 GCE 雲服務。
+> 以此專案練習最近學到的技術，製作一個航空公司訂票系統後端，並設計情境 **「搶購限量優惠機票名額，處裡大量併發請求」** 的功能，並部屬至 GCE 雲服務。
 >
 > 核心技術點：
 >
@@ -70,19 +70,19 @@
 - api-server
     ├── app.js
     ├── routes
-		|		├── index.js
-		|		├── adminRouter.js
-		|		└── clientRouter.js
+    |     ├── index.js
+    |     ├── adminRouter.js
+    |     └── clientRouter.js
     ├── config
-		|		├── redisClient.js
-		|		└── mysqlClient.js
-		├── lua
-		|		└── bookTicket.lua
+    |     ├── redisClient.js
+    |     └── mysqlClient.js
+    ├── lua
+    |     └── bookTicket.lua
     ├── Dockerfile
     └── package.json
 - mysql
     └── init
-				└── init.sql
+		  └── init.sql
 - docker-compose.yml
 - .env
 ```
