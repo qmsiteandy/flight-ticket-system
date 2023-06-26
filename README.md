@@ -82,7 +82,7 @@
     └── package.json
 - mysql
     └── init
-		  └── init.sql
+	  └── init.sql
 - docker-compose.yml
 - .env
 ```
