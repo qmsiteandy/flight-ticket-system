@@ -97,6 +97,21 @@
 | API Tester    | Postman                                     |
 | Stress Tester | Jmeter                                      |
 
+# 系統運作設定
+1. clone 專案
+2. 添加 .env 檔
+  ```
+	MYSQL_ROOT_PASSWORD = 
+	MYSQL_USER = 
+	MYSQL_PASSWORD = 
+	MYSQL_DATABASE = 
+	MYSQL_PORT = 3306
+	REDIS_PORT = 6379
+	API_SERVER_PORT = 80
+  ```
+3. 終端機指令 `docker-compose up -d --build` 運行容器
+4. 如果是 Local 開發，可以 cd 進入 api-server 目錄後 `npm run dev` 啟動 Local 服務
+
 # Demo 操作 & JMeter 壓力測試
 
 https://youtu.be/kU-pjC2lXrg
