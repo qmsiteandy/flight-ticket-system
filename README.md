@@ -36,7 +36,6 @@
 - 目前尚未創建 User Table ，ticket、order 中的 Owner_ID 會先設定記錄 Demo 測試時輸入的使用者 ID。
 
 <img src="https://i.imgur.com/bjPj5kt.png" width="600"/>
-![Redis 資料庫安排](https://i.imgur.com/bjPj5kt.png)
 
 使用 Redis 快取機票資訊，搭配 Lua 腳本執行，可以有效處理高併發及避免超賣狀況。
 
@@ -97,6 +96,21 @@
 | Domain & DNS  | GoDaddy、Google DNS                         |
 | API Tester    | Postman                                     |
 | Stress Tester | Jmeter                                      |
+
+# 系統運作設定
+1. clone 專案
+2. 添加 .env 檔
+  ```
+	MYSQL_ROOT_PASSWORD = 
+	MYSQL_USER = 
+	MYSQL_PASSWORD = 
+	MYSQL_DATABASE = 
+	MYSQL_PORT = 3306
+	REDIS_PORT = 6379
+	API_SERVER_PORT = 80
+  ```
+3. 終端機指令 `docker-compose up -d --build` 運行容器
+4. 如果是 Local 開發，可以 cd 進入 api-server 目錄後 `npm run dev` 啟動 Local 服務
 
 # Demo 操作 & JMeter 壓力測試
 
